@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARIA — AI Transformation Intelligence Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --border: rgba(255,255,255,0.07);
+  --border-active: rgba(255,255,255,0.18);
+  --ink: #e8e6e1;
+  --muted: #6b6a72;
+  --accent: #7eb8f7;
+  --accent-dim: rgba(126,184,247,0.12);
+  --accent-glow: rgba(126,184,247,0.06);
+  --green: #6fcea0;
+  --green-dim: rgba(111,206,160,0.12);
+  --amber: #f0b96b;
+  --amber-dim: rgba(240,185,107,0.12);
+  --red: #f07878;
+  --red-dim: rgba(240,120,120,0.12);
+  --purple: #b89cf5;
+  --purple-dim: rgba(184,156,245,0.12);
+  --sans: 'Instrument Sans', sans-serif;
+  --serif: 'Fraunces', serif;
+  --mono: 'DM Mono', monospace;
+  --radius: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+::selection { background: var(--accent-dim); }
+
+/* ── SIDEBAR NAV ── */
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+@media(max-width:700px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+}
+
+.sidebar {
+  border-right: 0.5px solid var(--border);
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brand-name {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+.brand-tagline {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.nav-section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.nav-items { display: flex; flex-direction: column; gap: 2px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all .15s;
+  border: 0.5px solid transparent;
+  font-size: 13px;
+  color: var(--muted);
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-family: var(--sans);
+}
+
+.nav-item:hover { background: var(--surface); color: var(--ink); }
+.nav-item.active { background: var(--accent-dim); border-color: rgba(126,184,247,0.2); color: var(--accent); }
+
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  opacity: .5;
+}
+.nav-item.active .nav-dot { opacity: 1; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 0.5px solid var(--border);
+}
+
+.model-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: .06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.model-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ── MAIN ── */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── MODE PANELS ── */
+.mode-panel { display: none; flex-direction: column; flex: 1; }
+.mode-panel.active { display: flex; }
+
+/* ── HERO / INTRO ── */
+.hero {
+  padding: 3rem 2.5rem 2rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  line-height: 1.15;
+  margin-bottom: .75rem;
+  max-width: 600px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+/* ── MODE SWITCHER (top bar) ── */
+.mode-bar {
+  padding: .75rem 2.5rem;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  background: var(--surface);
+}
+
+.mode-tab {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  padding: 5px 12px;
+  border-radius: 99px;
+  border: 0.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  text-transform: uppercase;
+}
+
+.mode-tab:hover { border-color: var(--border-active); color: var(--ink); }
+.mode-tab.active { background: var(--accent-dim); border-color: rgba(126,184,247,0.3); color: var(--accent); }
+
+/* ── CHAT MODE ── */
+.chat-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem 2.5rem;
+  gap: 1rem;
+}
+
+.chat-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+  min-height: 340px;
+  max-height: 480px;
+}
+
+.msg {
+  display: flex;
+  gap: 12px;
+  animation: msgIn .2s ease;
+}
+
+@keyframes msgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+.msg.user { flex-direction: row-reverse; }
+
+.msg-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.msg-avatar.aria { background: var(--accent-dim); color: var(--accent); border: 0.5px solid rgba(126,184,247,0.2); }
+.msg-avatar.user-av { background: var(--surface2); color: var(--muted); border: 0.5px solid var(--border); }
+
+.msg-bubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.msg.aria .msg-bubble {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  color: var(--ink);
+}
+
+.msg.user .msg-bubble {
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(126,184,247,0.2);
+  color: var(--ink);
+}
+
+.msg-bubble strong { font-weight: 500; color: var(--accent); }
+.msg-bubble em { font-style: italic; color: var(--muted); }
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.typing-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: .2s; }
+.typing-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.chat-input {
+  flex: 1;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  transition: border-color .15s;
+  line-height: 1.5;
+}
+
+.chat-input:focus { outline: none; border-color: var(--border-active); }
+.chat-input::placeholder { color: var(--muted); }
+
+.send-btn {
+  width: 44px; height: 44px;
+  border-radius: var(--radius);
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(126,184,247,0.3);
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.send-btn:hover { background: rgba(126,184,247,0.2); }
+.send-btn:disabled { opacity: .35; cursor: default; }
+
+.send-btn svg { width: 16px; height: 16px; }
+
+.starter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: .5rem;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .04em;
+}
+.chip:hover { border-color: var(--border-active); color: var(--ink); }
+
+/* ── DIAGNOSTIC MODE ── */
+.diagnostic-wrap {
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.diag-step {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.diag-step-header {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(126,184,247,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.step-title { font-size: 13px; font-weight: 500; }
+.step-sub { font-size: 11px; color: var(--muted); margin-left: auto; font-family: var(--mono); }
+
+.diag-body { padding: 16px; }
+
+.diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width:500px) { .diag-grid { grid-template-columns: 1fr; } }
+
+.diag-field { display: flex; flex-direction: column; gap: 5px; }
+.diag-field label { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+
+.diag-input, .diag-select {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 12px;
+  transition: border-color .15s;
+  width: 100%;
+}
+
+.diag-input:focus, .diag-select:focus { outline: none; border-color: var(--border-active); }
+.diag-input::placeholder { color: var(--muted); }
+.diag-select option { background: var(--surface2); }
+
+.slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.slider-val { color: var(--accent); }
+
+input[type=range] {
+  width: 100%;
+  accent-color: var(--accent);
+  height: 3px;
+  cursor: pointer;
+}
+
+.analyze-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(126,184,247,0.3);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+.analyze-btn:hover { background: rgba(126,184,247,0.18); }
+.analyze-btn:disabled { opacity: .4; cursor: default; }
+
+/* ── REPORT OUTPUT ── */
+.report-wrap {
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.report-title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.report-score-ring {
+  text-align: center;
+  min-width: 80px;
+}
+
+.ring-val {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.ring-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.report-dims {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+}
+
+@media(max-width:500px) { .report-dims { grid-template-columns: 1fr; } }
+
+.report-dim {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+
+.rdim-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.rdim-name { font-size: 12px; font-weight: 500; }
+.rdim-val { font-family: var(--mono); font-size: 14px; }
+
+.rdim-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+.rdim-fill  { height: 3px; border-radius: 2px; }
+
+.rdim-insight { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+.report-section {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.rs-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.rs-content {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+
+.rs-content strong { font-weight: 500; color: var(--accent); }
+
+.generating-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2rem 2.5rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .06em;
+}
+
+/* color helpers */
+.c-green  { color: var(--green); }
+.c-amber  { color: var(--amber); }
+.c-red    { color: var(--red); }
+.c-accent { color: var(--accent); }
+.c-purple { color: var(--purple); }
+
+.fill-green  { background: var(--green); }
+.fill-amber  { background: var(--amber); }
+.fill-red    { background: var(--red); }
+.fill-accent { background: var(--accent); }
+
+.badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: .04em;
+  display: inline-block;
+}
+.badge-green  { background: var(--green-dim);  color: var(--green); }
+.badge-amber  { background: var(--amber-dim);  color: var(--amber); }
+.badge-red    { background: var(--red-dim);    color: var(--red); }
+.badge-accent { background: var(--accent-dim); color: var(--accent); }
+.badge-purple { background: var(--purple-dim); color: var(--purple); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-name">ARIA</div>
+      <div class="brand-tagline">AI Readiness &amp;<br>Intelligence Agent</div>
+    </div>
+
+    <div>
+      <div class="nav-section-label">Modes</div>
+      <div class="nav-items">
+        <button class="nav-item active" onclick="switchMode('advisor')">
+          <div class="nav-dot"></div>Strategy Advisor
+        </button>
+        <button class="nav-item" onclick="switchMode('diagnostic')">
+          <div class="nav-dot"></div>Org Diagnostic
+        </button>
+        <button class="nav-item" onclick="switchMode('coach')">
+          <div class="nav-dot"></div>Adoption Coach
+        </button>
+        <button class="nav-item" onclick="switchMode('plan')">
+          <div class="nav-dot"></div>Transformation Plan
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="nav-section-label">About</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;padding:0 2px;">
+        ARIA combines AI transformation strategy, behavioral science, and organizational psychology to help leaders navigate AI adoption with clarity.
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="model-badge">
+        <div class="model-dot"></div>
+        Powered by Claude
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- MODE: STRATEGY ADVISOR -->
+    <div class="mode-panel active" id="panel-advisor">
+      <div class="hero">
+        <div class="hero-eyebrow">Strategy Advisor</div>
+        <h1>Ask anything about <em>AI transformation</em></h1>
+        <p class="hero-sub">ARIA draws on frameworks from behavioral science, organizational psychology, and AI governance to give you grounded, strategic answers — not generic advice.</p>
+      </div>
+
+      <div class="chat-wrap">
+        <div class="chat-messages" id="advisor-messages">
+          <div class="msg aria">
+            <div class="msg-avatar aria">AR</div>
+            <div class="msg-bubble">
+              Hello. I'm ARIA — your AI transformation strategy advisor.<br><br>
+              I can help you think through <strong>organizational readiness</strong>, <strong>governance architecture</strong>, <strong>leadership alignment</strong>, <strong>workforce adoption</strong>, and the behavioral dynamics that determine whether AI transformation succeeds or stalls.<br><br>
+              What are you working through?
+            </div>
+          </div>
+        </div>
+
+        <div class="starter-chips" id="advisor-chips">
+          <div class="chip" onclick="sendChip(this,'advisor')">What are the biggest AI transformation failure modes?</div>
+          <div class="chip" onclick="sendChip(this,'advisor')">How do I build leadership alignment around AI?</div>
+          <div class="chip" onclick="sendChip(this,'advisor')">What does a governance framework actually need?</div>
+          <div class="chip" onclick="sendChip(this,'advisor')">How is AI adoption different from change management?</div>
+        </div>
+
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="advisor-input" placeholder="Ask ARIA a strategy question..." rows="1"
+            onkeydown="handleKey(event,'advisor')"
+            oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="advisor-send" onclick="sendMessage('advisor')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 8H2M9 3l5 5-5 5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE: ORG DIAGNOSTIC -->
+    <div class="mode-panel" id="panel-diagnostic">
+      <div class="hero">
+        <div class="hero-eyebrow">Org Diagnostic</div>
+        <h1>Profile your organization's <em>AI readiness</em></h1>
+        <p class="hero-sub">Answer a set of calibrated questions and ARIA will generate a readiness report with scored dimensions, vulnerability analysis, and prioritized interventions.</p>
+      </div>
+
+      <div class="diagnostic-wrap" id="diag-form-wrap">
+
+        <div class="diag-step">
+          <div class="diag-step-header">
+            <div class="step-num">1</div>
+            <span class="step-title">Organization profile</span>
+          </div>
+          <div class="diag-body">
+            <div class="diag-grid">
+              <div class="diag-field">
+                <label>Sector</label>
+                <select class="diag-select" id="d-sector">
+                  <option value="">Select sector</option>
+                  <option>Defense &amp; Intelligence</option>
+                  <option>Federal Civilian</option>
+                  <option>State &amp; Local Government</option>
+                  <option>Healthcare</option>
+                  <option>Financial Services</option>
+                  <option>Technology</option>
+                  <option>Manufacturing</option>
+                  <option>Higher Education</option>
+                  <option>Nonprofit</option>
+                  <option>Other Enterprise</option>
+                </select>
+              </div>
+              <div class="diag-field">
+                <label>Organization size</label>
+                <select class="diag-select" id="d-size">
+                  <option value="">Select size</option>
+                  <option>Under 500</option>
+                  <option>500–2,500</option>
+                  <option>2,500–10,000</option>
+                  <option>10,000–50,000</option>
+                  <option>50,000+</option>
+                </select>
+              </div>
+              <div class="diag-field">
+                <label>AI maturity stage</label>
+                <select class="diag-select" id="d-maturity">
+                  <option value="">Select stage</option>
+                  <option>Exploring — no formal AI program yet</option>
+                  <option>Piloting — early experiments underway</option>
+                  <option>Scaling — moving pilots to production</option>
+                  <option>Optimizing — AI embedded in workflows</option>
+                </select>
+              </div>
+              <div class="diag-field">
+                <label>Primary transformation goal</label>
+                <select class="diag-select" id="d-goal">
+                  <option value="">Select goal</option>
+                  <option>Workforce productivity</option>
+                  <option>Mission effectiveness</option>
+                  <option>Cost reduction</option>
+                  <option>Competitive positioning</option>
+                  <option>Regulatory compliance</option>
+                  <option>Innovation capability</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="diag-step">
+          <div class="diag-step-header">
+            <div class="step-num">2</div>
+            <span class="step-title">Readiness dimensions</span>
+            <span class="step-sub">Rate 0–100</span>
+          </div>
+          <div class="diag-body">
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Workforce AI literacy</span><span class="slider-val" id="v-literacy">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-literacy').textContent=this.value" id="s-literacy">
+            </div>
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Leadership alignment on AI vision</span><span class="slider-val" id="v-align">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-align').textContent=this.value" id="s-align">
+            </div>
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Governance &amp; policy maturity</span><span class="slider-val" id="v-gov">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-gov').textContent=this.value" id="s-gov">
+            </div>
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Data infrastructure readiness</span><span class="slider-val" id="v-data">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-data').textContent=this.value" id="s-data">
+            </div>
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Change adoption capacity</span><span class="slider-val" id="v-change">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-change').textContent=this.value" id="s-change">
+            </div>
+            <div class="slider-row">
+              <div class="slider-label-row"><span>Strategic momentum (active progress)</span><span class="slider-val" id="v-momentum">50</span></div>
+              <input type="range" min="0" max="100" value="50" step="1" oninput="document.getElementById('v-momentum').textContent=this.value" id="s-momentum">
+            </div>
+          </div>
+        </div>
+
+        <div class="diag-step">
+          <div class="diag-step-header">
+            <div class="step-num">3</div>
+            <span class="step-title">Context &amp; constraints</span>
+          </div>
+          <div class="diag-body">
+            <div class="diag-field" style="margin-bottom:12px">
+              <label>Biggest blocker to AI adoption right now</label>
+              <input class="diag-input" id="d-blocker" placeholder="e.g. Leadership buy-in, budget, talent, policy constraints..." />
+            </div>
+            <div class="diag-field">
+              <label>What does success look like in 12 months?</label>
+              <input class="diag-input" id="d-success" placeholder="e.g. AI embedded in 3 core workflows, 60% workforce adoption..." />
+            </div>
+          </div>
+        </div>
+
+        <button class="analyze-btn" id="analyze-btn" onclick="runDiagnostic()">
+          Generate readiness report →
+        </button>
+      </div>
+
+      <div id="diag-report" style="display:none"></div>
+    </div>
+
+    <!-- MODE: ADOPTION COACH -->
+    <div class="mode-panel" id="panel-coach">
+      <div class="hero">
+        <div class="hero-eyebrow">Adoption Coach</div>
+        <h1>Coach for <em>workforce AI adoption</em></h1>
+        <p class="hero-sub">Grounded in Applied Behavior Analysis and organizational psychology. ARIA helps you design adoption as a behavior change intervention — not a training event.</p>
+      </div>
+
+      <div class="chat-wrap">
+        <div class="chat-messages" id="coach-messages">
+          <div class="msg aria">
+            <div class="msg-avatar aria">AR</div>
+            <div class="msg-bubble">
+              I'm operating in <strong>Adoption Coach</strong> mode.<br><br>
+              Most AI adoption programs fail because they treat adoption as a communication problem — send an email, run a training, done. It's not. It's a <strong>behavior change problem</strong>.<br><br>
+              Tell me about your workforce, your tool, or the resistance pattern you're seeing. I'll help you design an intervention that actually changes behavior.
+            </div>
+          </div>
+        </div>
+
+        <div class="starter-chips" id="coach-chips">
+          <div class="chip" onclick="sendChip(this,'coach')">My team is resistant to using the new AI tool</div>
+          <div class="chip" onclick="sendChip(this,'coach')">How do I design an AI literacy program that sticks?</div>
+          <div class="chip" onclick="sendChip(this,'coach')">What motivates early adopters vs late majority?</div>
+          <div class="chip" onclick="sendChip(this,'coach')">How do I measure adoption beyond training completion?</div>
+        </div>
+
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="coach-input" placeholder="Describe your adoption challenge..." rows="1"
+            onkeydown="handleKey(event,'coach')"
+            oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="coach-send" onclick="sendMessage('coach')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 8H2M9 3l5 5-5 5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE: TRANSFORMATION PLAN -->
+    <div class="mode-panel" id="panel-plan">
+      <div class="hero">
+        <div class="hero-eyebrow">Transformation Plan</div>
+        <h1>Generate a <em>strategic roadmap</em></h1>
+        <p class="hero-sub">Describe your organization and ARIA will build a phased AI transformation plan with sequenced interventions, risk flags, and governance checkpoints.</p>
+      </div>
+
+      <div class="chat-wrap">
+        <div class="chat-messages" id="plan-messages">
+          <div class="msg aria">
+            <div class="msg-avatar aria">AR</div>
+            <div class="msg-bubble">
+              I'm in <strong>Transformation Plan</strong> mode.<br><br>
+              Give me your organization's context — sector, size, current AI maturity, biggest constraints — and I'll generate a <strong>phased 12-month transformation roadmap</strong> with sequenced interventions, governance milestones, and risk mitigation checkpoints.<br><br>
+              You can be as brief or detailed as you'd like. More context means a more tailored plan.
+            </div>
+          </div>
+        </div>
+
+        <div class="starter-chips" id="plan-chips">
+          <div class="chip" onclick="sendChip(this,'plan')">Federal agency, 3,000 employees, just starting AI exploration</div>
+          <div class="chip" onclick="sendChip(this,'plan')">Enterprise, scaling AI from pilots to production</div>
+          <div class="chip" onclick="sendChip(this,'plan')">Defense org with governance constraints and skeptical leadership</div>
+        </div>
+
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="plan-input" placeholder="Describe your organization and transformation goal..." rows="1"
+            onkeydown="handleKey(event,'plan')"
+            oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="plan-send" onclick="sendMessage('plan')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 8H2M9 3l5 5-5 5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const SYSTEM_PROMPTS = {
+  advisor: `You are ARIA (AI Readiness and Intelligence Agent), a senior AI transformation strategy advisor. You specialize in the intersection of AI strategy, organizational psychology, behavioral science, and enterprise transformation.
+
+Your expertise spans: organizational AI readiness assessment, governance framework design (including NIST AI RMF), leadership alignment, workforce transformation, and behavior change intervention design. You apply Applied Behavior Analysis (ABA) principles to AI adoption — treating adoption as a behavior change problem, not a communication problem.
+
+Tone: Grounded, precise, intellectually serious. No hype. You challenge surface-level thinking and push toward systemic, evidence-based approaches. You speak like a trusted advisor to senior leaders — direct, confident, concise.
+
+Format: Use short paragraphs. Bold key concepts sparingly. Avoid bullet-point dumps — prefer prose with clear reasoning. When appropriate, name the behavioral or organizational mechanisms at play. Keep responses under 250 words unless a detailed framework is explicitly needed.`,
+
+  coach: `You are ARIA in Adoption Coach mode. You specialize in designing AI adoption as behavior change intervention — grounded in Applied Behavior Analysis (ABA), motivation science, and organizational psychology.
+
+Your lens: Adoption fails when it's treated as a training or communication problem. Real adoption requires changing behavior through motivation operations, reducing response effort, building reinforcement histories, and addressing competing behaviors. You think in terms of: antecedents, behaviors, consequences; extinction bursts; differential reinforcement; satiation and deprivation.
+
+Tone: Practical, empathetic, behavior-science fluent. You meet practitioners where they are and give them actionable intervention designs — not abstract frameworks.
+
+Format: Conversational but precise. Name the behavioral mechanisms. Give concrete intervention steps. Keep responses focused and under 250 words unless designing a full intervention plan.`,
+
+  plan: `You are ARIA in Transformation Plan mode. When given an organization's context, you generate a structured, phased AI transformation roadmap.
+
+Your plans include: Phase names and timeframes, sequenced interventions with rationale, governance checkpoints, risk flags with mitigation strategies, behavioral/cultural considerations alongside technical ones, and success metrics per phase.
+
+Structure plans as Phase 1 / Phase 2 / Phase 3 (typically Foundation → Acceleration → Embed). Each phase should have: duration, 3-4 priority actions, key risks, and a governance checkpoint.
+
+Tone: Strategic, clear, actionable. Write like a transformation architect presenting to a C-suite. Be specific — avoid generic recommendations that could apply to any organization.
+
+Format: Use clear phase headers. Prose paragraphs within phases, not bullet lists. Bold phase names and key interventions. Keep total response under 400 words unless the user asks for more depth.`
+};
+
+const histories = { advisor: [], coach: [], plan: [] };
+let currentMode = 'advisor';
+let isLoading = false;
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + mode).classList.add('active');
+  document.querySelectorAll('.nav-item')[['advisor','diagnostic','coach','plan'].indexOf(mode)].classList.add('active');
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e, mode) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage(mode);
+  }
+}
+
+function sendChip(el, mode) {
+  const input = document.getElementById(mode + '-input');
+  input.value = el.textContent;
+  sendMessage(mode);
+}
+
+function addMessage(mode, role, text) {
+  const container = document.getElementById(mode + '-messages');
+  const chips = document.getElementById(mode + '-chips');
+  if (chips) chips.style.display = 'none';
+
+  const div = document.createElement('div');
+  div.className = 'msg ' + (role === 'user' ? 'user' : 'aria');
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar ' + (role === 'user' ? 'user-av' : 'aria');
+  avatar.textContent = role === 'user' ? 'You' : 'AR';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = formatMsg(text);
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return bubble;
+}
+
+function formatMsg(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function addTyping(mode) {
+  const container = document.getElementById(mode + '-messages');
+  const div = document.createElement('div');
+  div.className = 'msg aria';
+  div.id = 'typing-' + mode;
+  div.innerHTML = `<div class="msg-avatar aria">AR</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping(mode) {
+  const el = document.getElementById('typing-' + mode);
+  if (el) el.remove();
+}
+
+async function sendMessage(mode) {
+  if (isLoading) return;
+  const input = document.getElementById(mode + '-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  isLoading = true;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById(mode + '-send').disabled = true;
+
+  addMessage(mode, 'user', text);
+  histories[mode].push({ role: 'user', content: text });
+  addTyping(mode);
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPTS[mode],
+        messages: histories[mode]
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || 'Something went wrong. Please try again.';
+
+    removeTyping(mode);
+    addMessage(mode, 'aria', reply);
+    histories[mode].push({ role: 'assistant', content: reply });
+  } catch (err) {
+    removeTyping(mode);
+    addMessage(mode, 'aria', 'Connection error. Please check your network and try again.');
+  }
+
+  isLoading = false;
+  document.getElementById(mode + '-send').disabled = false;
+  input.focus();
+}
+
+async function runDiagnostic() {
+  const sector   = document.getElementById('d-sector').value;
+  const size     = document.getElementById('d-size').value;
+  const maturity = document.getElementById('d-maturity').value;
+  const goal     = document.getElementById('d-goal').value;
+
+  if (!sector || !size || !maturity || !goal) {
+    alert('Please complete all profile fields before generating the report.');
+    return;
+  }
+
+  const literacy  = parseInt(document.getElementById('s-literacy').value);
+  const align     = parseInt(document.getElementById('s-align').value);
+  const gov       = parseInt(document.getElementById('s-gov').value);
+  const data      = parseInt(document.getElementById('s-data').value);
+  const change    = parseInt(document.getElementById('s-change').value);
+  const momentum  = parseInt(document.getElementById('s-momentum').value);
+  const blocker   = document.getElementById('d-blocker').value;
+  const success   = document.getElementById('d-success').value;
+
+  const overall = Math.round((literacy + align + gov + data + change + momentum) / 6);
+
+  document.getElementById('diag-form-wrap').style.display = 'none';
+  document.getElementById('analyze-btn').disabled = true;
+
+  const reportEl = document.getElementById('diag-report');
+  reportEl.style.display = 'block';
+  reportEl.innerHTML = `<div class="generating-msg"><div class="typing-indicator" style="display:inline-flex"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div><span>Analyzing your organization and generating readiness report...</span></div>`;
+
+  const dimColor = v => v >= 65 ? 'green' : v >= 40 ? 'amber' : 'red';
+  const dimFill  = v => v >= 65 ? 'fill-green' : v >= 40 ? 'fill-amber' : 'fill-red';
+  const dimBadge = v => v >= 65 ? 'badge-green' : v >= 40 ? 'badge-amber' : 'badge-red';
+  const dimStatus= v => v >= 65 ? 'Healthy' : v >= 40 ? 'At risk' : 'Critical';
+  const overallColor = v => v >= 65 ? 'c-green' : v >= 40 ? 'c-amber' : 'c-red';
+
+  const prompt = `You are generating a structured AI readiness diagnostic report for the following organization:
+
+Sector: ${sector}
+Size: ${size}
+AI Maturity Stage: ${maturity}
+Primary Goal: ${goal}
+
+Readiness scores (0-100):
+- Workforce AI Literacy: ${literacy}
+- Leadership Alignment: ${align}
+- Governance & Policy Maturity: ${gov}
+- Data Infrastructure: ${data}
+- Change Adoption Capacity: ${change}
+- Strategic Momentum: ${momentum}
+- Overall: ${overall}
+
+Biggest blocker: ${blocker || 'Not specified'}
+Success definition (12 months): ${success || 'Not specified'}
+
+Generate a concise diagnostic report with exactly these four sections, each clearly separated:
+
+VULNERABILITY ANALYSIS
+A 3-sentence analysis of where this organization is most at risk and why, given the specific score profile. Name the interdependencies between low-scoring dimensions.
+
+SEQUENCED INTERVENTIONS
+Three specific, prioritized interventions for this organization. For each: name it, explain why it ranks where it does, and what it unlocks. Write in prose, not bullets.
+
+WHAT HAPPENS IF YOU DO NOTHING
+A 2-sentence honest projection of where this organization will be in 12 months without active intervention. Be direct.
+
+FIRST 90 DAYS
+Three concrete actions this organization should take in the first 90 days, written as direct recommendations.
+
+Keep the total response under 350 words. Write with authority and specificity — no generic advice.`;
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+
+    const dims = [
+      { name: 'Workforce Literacy', val: literacy },
+      { name: 'Leadership Alignment', val: align },
+      { name: 'Governance Maturity', val: gov },
+      { name: 'Data Infrastructure', val: data },
+      { name: 'Change Capacity', val: change },
+      { name: 'Strategic Momentum', val: momentum },
+    ];
+
+    const sections = ['VULNERABILITY ANALYSIS','SEQUENCED INTERVENTIONS','WHAT HAPPENS IF YOU DO NOTHING','FIRST 90 DAYS'];
+    const parsed = {};
+    sections.forEach((sec, i) => {
+      const start = text.indexOf(sec);
+      if (start === -1) { parsed[sec] = ''; return; }
+      const contentStart = start + sec.length;
+      const nextSec = sections[i+1] ? text.indexOf(sections[i+1]) : text.length;
+      parsed[sec] = text.slice(contentStart, nextSec).trim();
+    });
+
+    reportEl.innerHTML = `
+      <div class="report-wrap">
+        <div class="report-header">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">AI Readiness Report · ${sector}</div>
+            <div class="report-title">Organizational Readiness Assessment</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+              <span class="badge badge-accent">${maturity}</span>
+              <span class="badge badge-accent">${size}</span>
+              <span class="badge badge-accent">${goal}</span>
+            </div>
+          </div>
+          <div class="report-score-ring">
+            <div class="ring-val ${overallColor(overall)}">${overall}</div>
+            <div class="ring-label">Overall<br>readiness</div>
+          </div>
+        </div>
+
+        <div class="report-dims">
+          ${dims.map(d => `
+            <div class="report-dim">
+              <div class="rdim-top">
+                <span class="rdim-name">${d.name}</span>
+                <span class="rdim-val c-${dimColor(d.val)}">${d.val}</span>
+              </div>
+              <div class="rdim-track"><div class="rdim-fill ${dimFill(d.val)}" style="width:${d.val}%"></div></div>
+              <div><span class="badge ${dimBadge(d.val)}">${dimStatus(d.val)}</span></div>
+            </div>
+          `).join('')}
+        </div>
+
+        ${sections.map(sec => parsed[sec] ? `
+          <div class="report-section">
+            <div class="rs-label">${sec}</div>
+            <div class="rs-content">${formatMsg(parsed[sec])}</div>
+          </div>
+        ` : '').join('')}
+
+        <button class="analyze-btn" onclick="resetDiagnostic()" style="margin-top:.5rem">
+          Run another assessment →
+        </button>
+      </div>
+    `;
+  } catch (err) {
+    reportEl.innerHTML = `<div class="generating-msg">Error generating report. Please try again.</div>`;
+    document.getElementById('diag-form-wrap').style.display = 'flex';
+    document.getElementById('analyze-btn').disabled = false;
+  }
+}
+
+function resetDiagnostic() {
+  document.getElementById('diag-report').style.display = 'none';
+  document.getElementById('diag-form-wrap').style.display = 'flex';
+  document.getElementById('analyze-btn').disabled = false;
+}
+</script>
+</body>
+</html>
